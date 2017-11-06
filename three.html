@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head><title>Hello Three.js</title></head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js"></script>
+
+<style>
+  body {
+    overflow: hidden;
+  }
+
+  div {
+    position: absolute;
+    top: 90vh;
+    left: 30vw;
+  }
+
+  #angle {
+    height: 20px;
+    width: 45px;
+  }
+</style>
+
+<body>
+
+<div>
+  <input id='angle' type='text'>
+  <button id='myButton'>顯示XYZ軸</button>
+  <input class='gclass' type='radio' name='g' value='Box' style="top:100px; left:0px;" checked> Box
+  <input class='gclass' type='radio' name='g' value='Sphere' style="top:1000px; left:0px;"> Sphere
+  <input id='speed' type='range' min=-20 max=20> Speed
+</div>
+
+
+<script>
+  var renderer, camera, controls, scene;
+  var stats;
+  var cubeGeometry, cubeMaterial, cube, angle=0, speed=0;
+
+            init();
+            animate();
+            rotate();
+
+            function init() {
+                renderer = new THREE.WebGLRenderer({ //renderer = 呈現，建立算圖引擎
+                      antialias: true //進行抗鋸齒算圖
+                });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setClearColor(0xAAAAAA); //背景顏色，用16進位色碼表示。
+                document.body.appendChild(renderer.domElement);
+
+                camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000); //(相機平截鏡頭垂直視野，相機平截鏡頭縱橫比，離相機鏡頭最近，離相機鏡頭最遠)
+                camera.position.z = 50;  // important  可視為程式剛開始執行的時候camera所要呈現的視角，這裡我們視角座標為(0,0,50)。
+
+                controls = new THREE.OrbitControls(camera, renderer.domElement);  //控制視角遠近的 function
+
+                scene = new THREE.Scene();  //創造場景的呈現樣貌 (XYZ軸以及方格子)
+
+                let gridXZ = new THREE.GridHelper(100, 20, 'yellow', 'white'); //(大小, 每個邊格子劃分數, 中心線的顏色, 網格線條的顏色)
+                scene.add(gridXZ); //顯示十字軸以及方格
+
+                let axes = new THREE.AxisHelper (10);  //(大小)
+                scene.add (axes); //顯示XYZ軸 (紅,綠,藍)
+
+                stats = new Stats(); //顯示FPS
+                stats.domElement.style.position = 'absolute';
+                stats.domElement.style.top = '90%';
+                stats.domElement.style.left = '0px';
+                stats.domElement.style.zIndex = 100;
+                document.body.appendChild( stats.domElement );
+
+
+                $('#myButton').click ( function() {          //切換軸的顯示
+                  axes.material.visible = ! axes.material.visible;  //顯示 = 不顯示
+                });
+
+                window.addEventListener('resize', onWindowResize, false);
+
+                cubeGeometry = new THREE.BoxGeometry(50,5,5);
+                cylinderGeometry = new THREE.CylinderGeometry( 3, 3, 50, 32 );
+                cube = new THREE.Mesh(cubeGeometry, new THREE.MeshNormalMaterial());
+                cylinder = new THREE.Mesh(cylinderGeometry, new THREE.MeshNormalMaterial());
+                scene.add(cube);
+                scene.add(cylinder);
+                cylinder.material.visible = ! cylinder.material.visible;
+
+                $('.gclass').click(function(){
+                	if($(this).val() === 'Box' && cube.material.visible === false){
+                  	cube.material.visible = ! cube.material.visible;
+                    cylinder.material.visible = ! cylinder.material.visible;
+                  }
+                  else if($(this).val() === 'Sphere' && cylinder.material.visible === false){
+                  	cube.material.visible = ! cube.material.visible;
+                    cylinder.material.visible = ! cylinder.material.visible;
+                  }
+                });
+
+                $('#speed').change( function(){
+                  speed = $(this).val();
+              	});
+            }
+
+            function animate() {
+              controls.update(); //更新控制視角遠近動畫
+              stats.update(); //FPS隨時更新
+              renderer.render (scene, camera);  //算圖
+              requestAnimationFrame (animate);  //一種不斷對算圖更新的方法，當畫面有進行任何更動時可以不斷更新!!!
+            }
+
+            function onWindowResize(){
+            	var width = window.innerWidth;
+              var height = window.innerHeight;
+            	camera.aspect = width/height;
+            	camera.updateProjectionMatrix();
+              renderer.setSize(width, height);
+            }
+
+            function rotate() {
+            	angle += speed/100;
+            	cube.rotation.z=angle;
+              cylinder.rotation.z=angle + Math.PI/2;
+              renderer.render(scene, camera);
+              requestAnimationFrame(rotate);
+              $("#angle").val((Math.sin(cube.rotation.z)*90).toFixed(2)); //顯示為小數點後兩位
+            }
+</script>
+
+</body>
+</html>
