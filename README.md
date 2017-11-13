@@ -1,6 +1,8 @@
-﻿## 歡迎來到 j91157j91157 的Github！
+## 歡迎來到 j91157j91157 的Github！
 
 #### Computer Graphic Fall 2017 By I5370
+**E-mail： j91157j91157@gmail.com**
+
 **這位是看板娘** ------->
 ![][miku]
 
