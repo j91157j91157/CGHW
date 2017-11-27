@@ -46,6 +46,8 @@ Homework 4 : OBJ loader, d-drive, collision
 <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script> //OrbitControls
 
 <script src="https://jyunming-chen.github.io/tutsplus/js/KeyboardState.js"></script> //KeyboardState
+
+<script src="https://threejs.org/build/three.js"></script> //Texture
 ```
 [按我回到TOP (ページトップへ)](#readme)
 
