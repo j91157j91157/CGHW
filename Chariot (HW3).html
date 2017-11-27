@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>炫 炮 時 鐘</title>
+    <title>戰★痛★車</title>
     <link rel="shortcut icon" href="http://i.imgur.com/jnjsKvZ.png">
 </head>
 
@@ -204,12 +204,34 @@ function animate() {
     Chariot.position.z += 0.8 * Math.cos(angle);
     Chariot.position.x += 0.8 * Math.sin(angle);
   }
-  if (keyboard.down("S") || keyboard.pressed("S")) {
+  else if (keyboard.down("S") || keyboard.pressed("S")) {
     Chariot.position.z -= 0.8 * Math.cos(angle);
     Chariot.position.x -= 0.8 * Math.sin(angle);
   }
-  if (keyboard.down("w") || keyboard.pressed("A")) angle += 0.05;
-  if (keyboard.down("D") || keyboard.pressed("D")) angle -= 0.05;
+  else if (keyboard.down("w") || keyboard.pressed("A")) angle += 0.05;
+  else if (keyboard.down("D") || keyboard.pressed("D")) angle -= 0.05;
+
+  if ((keyboard.pressed("W")) && (keyboard.down("A") || keyboard.pressed("A"))) {
+    Chariot.position.z += 0.8 * Math.cos(angle);
+    Chariot.position.x += 0.8 * Math.sin(angle);
+    angle += 0.05;
+  }
+  else if ((keyboard.pressed("W")) && (keyboard.down("D") || keyboard.pressed("D"))) {
+    Chariot.position.z += 0.8 * Math.cos(angle);
+    Chariot.position.x += 0.8 * Math.sin(angle);
+    angle -= 0.05;
+  }
+  else if ((keyboard.pressed("S")) && (keyboard.down("A") || keyboard.pressed("A"))) {
+    Chariot.position.z -= 0.8 * Math.cos(angle);
+    Chariot.position.x -= 0.8 * Math.sin(angle);
+    angle -= 0.05;
+  }
+  else if ((keyboard.pressed("S")) && (keyboard.down("D") || keyboard.pressed("D")))  {
+    Chariot.position.z -= 0.8 * Math.cos(angle);
+    Chariot.position.x -= 0.8 * Math.sin(angle);
+    angle += 0.05;
+  }
+  
   if (keyboard.down("K") || keyboard.pressed("K")) turret.rotation.y += .01;
   if (keyboard.down(";") || keyboard.pressed(";")) turret.rotation.y -= .01;
 
