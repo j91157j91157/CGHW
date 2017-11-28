@@ -90,8 +90,10 @@ animate();
 
 function buildBall() {
   var ball = new Ball();
+  var loader = new THREE.TextureLoader(); //84 texture 載入器
+  loader.setCrossOrigin ('');
   var material = new THREE.MeshBasicMaterial({
-    map: new THREE.TextureLoader().load('texture/HW3/ball.jpg')
+    map: loader.load('texture/HW3/ball.jpg')
   })
   var ballMesh = new THREE.Mesh(new THREE.SphereGeometry(1.4, 20, 20), material);
   balls.push(ball);
@@ -159,7 +161,9 @@ function init() {
   scene.add(Chariot);
 
   //草地
-  var floorTexture = new THREE.TextureLoader().load('texture/HW3/floor.jpg');
+  var loader = new THREE.TextureLoader(); //84 texture 載入器
+  loader.setCrossOrigin ('');
+  var floorTexture = loader.load('texture/HW3/floor.jpg');
   floorTexture.wrapS = THREE.RepeatWrapping;
   floorTexture.wrapT = THREE.RepeatWrapping;
   floorTexture.repeat.set(8, 8);
@@ -179,7 +183,7 @@ function init() {
 
   //標靶
   var material = new THREE.MeshBasicMaterial({
-    map: new THREE.TextureLoader().load('texture/HW3/target.png'),
+    map: loader.load('texture/HW3/target.png'),
     side: THREE.DoubleSide
   })
   target = new THREE.Mesh(new THREE.CylinderGeometry(10, 10, 1, 64), material);
@@ -231,7 +235,7 @@ function animate() {
     Chariot.position.x -= 0.8 * Math.sin(angle);
     angle += 0.05;
   }
-  
+
   if (keyboard.down("K") || keyboard.pressed("K")) turret.rotation.y += .01;
   if (keyboard.down(";") || keyboard.pressed(";")) turret.rotation.y -= .01;
 
@@ -285,32 +289,33 @@ function build() {
   var chariot = new THREE.Object3D();
   var normalMat = new THREE.MeshNormalMaterial();
 
-
+  var loader = new THREE.TextureLoader(); //84 texture 載入器
+  loader.setCrossOrigin ('');
   var materialArray = [
     new THREE.MeshBasicMaterial({ // +x
-      map: new THREE.TextureLoader().load('texture/HW3/chariot_right.jpg')
+      map: loader.load('texture/HW3/chariot_right.jpg')
     }),
     new THREE.MeshBasicMaterial({ // -x
-      map: new THREE.TextureLoader().load('texture/HW3/chariot_left.jpg')
+      map: loader.load('texture/HW3/chariot_left.jpg')
     }),
     new THREE.MeshBasicMaterial({ // +y
-      map: new THREE.TextureLoader().load('texture/HW3/steel.jpg')
+      map: loader.load('texture/HW3/steel.jpg')
     }),
     new THREE.MeshBasicMaterial({ // -y
       visible: false
     }),
     new THREE.MeshBasicMaterial({ // +z
-      map: new THREE.TextureLoader().load('texture/HW3/chariot_front.jpg')
+      map: loader.load('texture/HW3/chariot_front.jpg')
     }),
     new THREE.MeshBasicMaterial({ // -z
-      map: new THREE.TextureLoader().load('texture/HW3/chariot_back.jpg')
+      map: loader.load('texture/HW3/chariot_back.jpg')
     })
   ];
 
   var material = new THREE.MultiMaterial(materialArray);
 
   var material_Steel = new THREE.MeshBasicMaterial({
-    map: new THREE.TextureLoader().load('texture/HW3/steel.jpg')
+    map: loader.load('texture/HW3/steel.jpg')
   })
 
   base = new THREE.Mesh(new THREE.BoxBufferGeometry(20, 10, 40), material);
