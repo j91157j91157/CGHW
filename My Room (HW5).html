@@ -159,6 +159,29 @@
     floor.rotation.x = -Math.PI / 2;
     scene.add(floor);
 
+    // wall
+    var wallTexture = loader.load('texture/HW5/wall.jpg');
+    var wall_negz = new THREE.Mesh(new THREE.PlaneGeometry(200, 100, 140, 140), new THREE.MeshLambertMaterial({
+      map: wallTexture
+    }));
+    wall_negz.position.y = 50;
+    var wall_posz = wall_negz.clone();
+    var wall_posx = wall_negz.clone();
+    var wall_negx = wall_negz.clone();
+
+    wall_negz.position.z = -100;
+    wall_posz.rotation.x = Math.PI;
+    wall_posz.position.z = 100;
+    wall_negx.position.x = -100;
+    wall_negx.rotation.y = Math.PI / 2;
+    wall_posx.position.x = 100;
+    wall_posx.rotation.y = -Math.PI / 2;
+    scene.add(wall_negz);
+    scene.add(wall_posz);
+    scene.add(wall_negx);
+    scene.add(wall_posx);
+
+
     // lighting
     var light = new THREE.AmbientLight(0x505050); // soft white light
     scene.add(light);
@@ -466,7 +489,8 @@
 
     var sidemap = loader.load('texture/HW5/penHolder_texture_x.png');
     var penHolder_texture_x = new THREE.MeshLambertMaterial({
-      map: sidemap
+      map: sidemap,
+      transparent: true,
       /*,wireframe: true*/
     });
 
@@ -495,16 +519,7 @@
     pencil_avatar.rotation.x = Math.PI/7;
     pencil_avatar.rotation.z = Math.PI/7.5;
 
-
-    penHolder.add(base);
-    penHolder.add(surface_posx);
-    penHolder.add(surface_negx);
-    penHolder.add(surface_posz);
-    penHolder.add(surface_negz);
-    penHolder.add(pencil);
-    penHolder.add(pencil_avatar);
-
-    penHolder.customDepthMaterial = new THREE.ShaderMaterial({
+    surface_posx.customDepthMaterial = new THREE.ShaderMaterial({  //小提醒：不可以用 Object3D ，必須是一個 Mesh
         uniforms: {
             texture: {
                 type: 't',
@@ -514,6 +529,16 @@
         vertexShader: document.getElementById('vertexShaderDepth').textContent,
         fragmentShader: document.getElementById('fragmentShaderDepth').textContent
     });
+
+    penHolder.add(base);
+    penHolder.add(surface_posx);
+    penHolder.add(surface_negx);
+    penHolder.add(surface_posz);
+    penHolder.add(surface_negz);
+    penHolder.add(pencil);
+    penHolder.add(pencil_avatar);
+
+
 
     return penHolder;
   }
