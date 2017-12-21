@@ -140,6 +140,12 @@ function build_table() {
     map: loader.load('texture/HW5/cabinet_surface_2.png')
   }));
   cabinet_surface_2.position.set(21, 11, 21);
+  var teacher = new THREE.Mesh(new THREE.PlaneGeometry( 30, 20, 32 ), new THREE.MeshBasicMaterial({
+    map: loader.load('texture/HW5/teacher.jpg')
+    //side: THREE.DoubleSide
+  }));
+  teacher.position.set(-11, 25.95, 0);
+  teacher.rotation.x = Math.PI / 2;
 
   table.add(base);
   table.add(table_leg_1);
@@ -147,6 +153,7 @@ function build_table() {
   table.add(cabinet);
   table.add(cabinet_surface_1);
   table.add(cabinet_surface_2);
+  table.add(teacher);
 
   return table;
 }
@@ -158,6 +165,7 @@ function build_penHolder() {
   loader.setCrossOrigin ('');
 
   var penHolder_texture = new THREE.MeshLambertMaterial({
+    side: THREE.DoubleSide,
     map: loader.load('texture/HW5/penHolder_texture.jpg')
     /*,wireframe: true*/
   });
@@ -165,12 +173,23 @@ function build_penHolder() {
   var sidemap = loader.load('texture/HW5/penHolder_texture_x.png');
   var penHolder_texture_x = new THREE.MeshLambertMaterial({
     map: sidemap,
-    transparent: true,
+    transparent: true
     /*,wireframe: true*/
   });
 
+  var materialArray_penHolder = [
+    penHolder_texture_x,
+    penHolder_texture_x,
+    penHolder_texture,
+    penHolder_texture,
+    penHolder_texture,
+    penHolder_texture
+  ];
+
+  var material_penHolder = new THREE.MultiMaterial(materialArray_penHolder);
+
   var base = new THREE.Mesh(new THREE.BoxGeometry(4, 1, 4), penHolder_texture);
-  var surface_posx = new THREE.Mesh(new THREE.BoxGeometry(1, 8, 6), penHolder_texture_x);
+  var surface_posx = new THREE.Mesh(new THREE.BoxGeometry(1, 8, 6), material_penHolder);
   var surface_negx = surface_posx.clone();
   var surface_posz = new THREE.Mesh(new THREE.BoxGeometry(4, 8, 1), penHolder_texture);
   var surface_negz = surface_posz.clone();
@@ -213,8 +232,6 @@ function build_penHolder() {
   penHolder.add(pencil);
   penHolder.add(pencil_avatar);
 
-
-
   return penHolder;
 }
 
@@ -224,7 +241,7 @@ function build_remoteControl() {
   loader.setCrossOrigin ('');
   var base = new THREE.Mesh(new THREE.BoxGeometry(2, 0.5, 4), new THREE.MeshLambertMaterial({color: 0x808080}));
 
-  button = new Button(new THREE.Color (0x12ffff), 'cyan');
+  button = new Button(new THREE.Color (0xffff12), 'yellow');
   scene.add(button.obj);
   button.obj.position.z = -1;
   pickables.push(button.obj);
@@ -240,4 +257,119 @@ function build_remoteControl() {
 
 
   return remoteControl;
+}
+
+function build_photoFrame_miku() {
+  var photoFrame = new THREE.Object3D();
+  //penHolder total size 6, 8, 6
+  var loader = new THREE.TextureLoader();
+  loader.setCrossOrigin ('');
+
+  var material = new THREE.MeshLambertMaterial({color: 0x86cecb});
+  var base = new THREE.Mesh(new THREE.BoxGeometry(40, 1, 60), material);
+  var surface_posx = new THREE.Mesh(new THREE.BoxGeometry(1, 2, 62), material);
+  var surface_negx = surface_posx.clone();
+  var surface_posz = new THREE.Mesh(new THREE.BoxGeometry(40, 2, 1), material);
+  var surface_negz = surface_posz.clone();
+  var miku = new THREE.Mesh(new THREE.PlaneGeometry( 38, 58, 32 ), new THREE.MeshLambertMaterial({
+    map: loader.load('texture/HW5/miku.jpg')
+    //side: THREE.DoubleSide
+  }));
+
+  base.position.y = 0.5;
+  surface_posx.position.set(20.5, 1, 0);
+  surface_negx.position.set(-20.5, 1, 0);
+  surface_posz.position.set(0, 1, 30.5);
+  surface_negz.position.set(0, 1, -30.5);
+  miku.position.y = 1.5;
+  miku.rotation.x = -Math.PI / 2;
+
+  photoFrame.position.set(-45, 60, -100);
+  photoFrame.rotation.x = Math.PI / 2;
+
+  photoFrame.add(base);
+  photoFrame.add(miku);
+  photoFrame.add(surface_posx);
+  photoFrame.add(surface_negx);
+  photoFrame.add(surface_posz);
+  photoFrame.add(surface_negz);
+
+  return photoFrame;
+}
+
+function build_photoFrame_kirito() {
+  var photoFrame = new THREE.Object3D();
+  //penHolder total size 6, 8, 6
+  var loader = new THREE.TextureLoader();
+  loader.setCrossOrigin ('');
+
+  var material = new THREE.MeshLambertMaterial({color: 0x87ceeb});
+  var base = new THREE.Mesh(new THREE.BoxGeometry(40, 1, 60), material);
+  var surface_posx = new THREE.Mesh(new THREE.BoxGeometry(1, 2, 62), material);
+  var surface_negx = surface_posx.clone();
+  var surface_posz = new THREE.Mesh(new THREE.BoxGeometry(40, 2, 1), material);
+  var surface_negz = surface_posz.clone();
+  var kirito = new THREE.Mesh(new THREE.PlaneGeometry( 38, 58, 32 ), new THREE.MeshLambertMaterial({
+    map: loader.load('texture/HW5/kirito.jpg')
+    //side: THREE.DoubleSide
+  }));
+
+  base.position.y = 0.5;
+  surface_posx.position.set(20.5, 1, 0);
+  surface_negx.position.set(-20.5, 1, 0);
+  surface_posz.position.set(0, 1, 30.5);
+  surface_negz.position.set(0, 1, -30.5);
+  kirito.position.y = 1.5;
+  kirito.rotation.x = -Math.PI / 2;
+
+  photoFrame.position.set(45, 60, -100);
+  photoFrame.rotation.x = Math.PI / 2;
+
+  photoFrame.add(base);
+  photoFrame.add(kirito);
+  photoFrame.add(surface_posx);
+  photoFrame.add(surface_negx);
+  photoFrame.add(surface_posz);
+  photoFrame.add(surface_negz);
+
+  return photoFrame;
+}
+
+function build_photoFrame_boat() {
+  var photoFrame = new THREE.Object3D();
+  //penHolder total size 6, 8, 6
+  var loader = new THREE.TextureLoader();
+  loader.setCrossOrigin ('');
+
+  var material = new THREE.MeshLambertMaterial();
+  var base = new THREE.Mesh(new THREE.BoxGeometry(120, 1, 60), material);
+  var surface_posx = new THREE.Mesh(new THREE.BoxGeometry(1, 2, 60), material);
+  var surface_negx = surface_posx.clone();
+  var surface_posz = new THREE.Mesh(new THREE.BoxGeometry(122, 2, 1), material);
+  var surface_negz = surface_posz.clone();
+  var boat = new THREE.Mesh(new THREE.PlaneGeometry( 118, 59, 32 ), new THREE.MeshLambertMaterial({ // 38 58 32
+    map: loader.load('texture/HW5/boat.jpg')
+    //side: THREE.DoubleSide
+  }));
+
+  base.position.y = 0.5;
+  surface_posx.position.set(60.5, 1, 0);
+  surface_negx.position.set(-60.5, 1, 0);
+  surface_posz.position.set(0, 1, 30.5);
+  surface_negz.position.set(0, 1, -30.5);
+  boat.position.y = 1.5;
+  boat.rotation.x = -Math.PI / 2;
+
+  photoFrame.position.set(100, 60, 0);
+  photoFrame.rotation.x = Math.PI / 2;
+  photoFrame.rotation.z = Math.PI / 2;
+
+  photoFrame.add(base);
+  photoFrame.add(boat);
+  photoFrame.add(surface_posx);
+  photoFrame.add(surface_negx);
+  photoFrame.add(surface_posz);
+  photoFrame.add(surface_negz);
+
+  return photoFrame;
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>test</title>
+    <title>★我現實中的房間長這樣哦~★</title>
     <link rel="shortcut icon" href="http://i.imgur.com/jnjsKvZ.png">
 </head>
 
@@ -9,14 +9,7 @@
 <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
 <script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/MTLLoader.js"></script>
 <script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/OBJLoader.js"></script>
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="build.html"></script>
-
-<div id="info">HW5 破壞死光
-  <br>
-  <button id="toggle" style="width:20%">Toggle</button>
-  <button id="toggle1" style="width:20%">Toggle lamp</button>
-</div>
+<script src="deputyProgram/HW5.html"></script>
 
 <script type="x-shader/x-vertex" id="vertexShaderDepth">
     varying vec2 vUV;
@@ -51,15 +44,6 @@
 	body {
 		overflow: hidden
 	}
-
-	#info {
-	  position: absolute;
-	  top: 0px;
-	  width: 100%;
-	  padding: 10px;
-	  text-align: center;
-	  color: #ffff00
-	}
 </style>
 
 <body>
@@ -67,24 +51,19 @@
   var renderer, camera, controls, scene;
   var Table, PenHolder, RemoteControl;
   var roomLight, lampLight;
-  var toggleRoom = false, toggleLamp = true;
+  var PhotoFrame_miku, PhotoFrame_kirito, PhotoFrame_boat;
+  var toggleRoom = false, toggleLamp = false;
   var pickables = [];
   var raycaster = new THREE.Raycaster();
   var mouse = new THREE.Vector2();
-  var button, button2;
-
+  var button, button2, button3;
+  var KP = 1000, KD = 5;
+  var yy = 0, vv = 0;
+  var gravity = true;
+  var lampLight_ref = 0;
 
   init();
   animate();
-
-  $("#toggle").click(function() {
-    toggleRoom = ! toggleRoom;
-  });
-
-  $("#toggle1").click(function() {
-    toggleLamp = ! toggleLamp;
-  });
-
 
   function init() {
 
@@ -112,6 +91,9 @@
     var loader = new THREE.TextureLoader();
     loader.setCrossOrigin ('');
     var floorTexture = loader.load('texture/HW5/floor.jpg');
+    floorTexture.wrapS = THREE.RepeatWrapping;
+    floorTexture.wrapT = THREE.RepeatWrapping;
+    floorTexture.repeat.set(2, 2);
     var floor = new THREE.Mesh(new THREE.PlaneGeometry(200, 200, 140, 140), new THREE.MeshLambertMaterial({
       map: floorTexture,
       side: THREE.DoubleSide
@@ -120,7 +102,7 @@
     scene.add(floor);
 
     // wall
-    var wallTexture = loader.load('texture/HW5/sister.jpg');
+    var wallTexture = loader.load('texture/HW5/wall.jpg');
     var wall_negz = new THREE.Mesh(new THREE.PlaneGeometry(200, 100, 140, 140), new THREE.MeshLambertMaterial({
       map: wallTexture
     }));
@@ -132,6 +114,7 @@
     wall_negz.position.z = -100;
     wall_posz.rotation.x = Math.PI;
     wall_posz.position.z = 100;
+    wall_posz.rotation.z = Math.PI;
     wall_negx.position.x = -100;
     wall_negx.rotation.y = Math.PI / 2;
     wall_posx.position.x = 100;
@@ -148,7 +131,7 @@
 
     // room light
     roomLight = new THREE.SpotLight(0xffffff);
-    roomLight.position.set(-25, 100, 25);
+    roomLight.position.set(-25, 170, 25);
 
     //roomLight.angle = Math.PI / 2; ??
     roomLight.angle = Math.PI / 2.5;
@@ -172,7 +155,7 @@
 
     lampLight.angle = Math.PI / 4; //角度改小一點
     lampLight.penumbra = 0.25;
-    lampLight.distance = 35; //從400改成了30
+    lampLight.distance = 32; //從400改成了30
     lampLight.decay = 1; //改0會穿過桌子
     //lampLight.intensity = 2; 在 animate 裡面有設 toggle ，限制了intensity
 
@@ -190,7 +173,7 @@
 
 
 
-    // model
+    // lampModel
 		var onProgress = function(xhr) {
 			if (xhr.lengthComputable) {
 				var percentComplete = xhr.loaded / xhr.total * 100;
@@ -229,6 +212,51 @@
 			}, onProgress, onError);
 		});
 
+    // chairModel
+		onProgress = function(xhr) {
+			if (xhr.lengthComputable) {
+				var percentComplete = xhr.loaded / xhr.total * 100;
+				console.log(Math.round(percentComplete, 2) + '% downloaded');
+			}
+		};
+		onError = function(xhr) {};
+		mtlLoader = new THREE.MTLLoader();
+		mtlLoader.setPath('model/HW5/');
+		mtlLoader.load('chair.mtl', function(materials) {
+			materials.preload();
+			var objLoader = new THREE.OBJLoader();
+			objLoader.setMaterials(materials);
+			objLoader.setPath('model/HW5/');
+			objLoader.load('chair.obj', function(object) {
+				let model = unitize (object, 35);
+        model.position.set(-10, -5, 35);
+        model.rotation.y = Math.PI;
+        model.traverse (
+         function (mesh) {
+            if (mesh instanceof THREE.Mesh) {
+              mesh.castShadow = true;
+              mesh.receiveShadow = true;
+            }
+          }
+        );
+				scene.add(model);
+				//scene.add (new THREE.BoxHelper (model));
+
+				object.traverse (
+					function(mesh) {
+						if (mesh instanceof THREE.Mesh) {
+							mesh.material.side = THREE.DoubleSide;
+						}
+				});
+			}, onProgress, onError);
+		});
+
+    // lampButton
+    button3 = new Button(new THREE.Color (0x12ffff), 'cyan');
+    scene.add(button3.obj);
+    button3.obj.position.set(-22, 30.25, -15);
+    pickables.push(button3.obj);
+
     window.addEventListener('resize', onWindowResize, false);
     document.addEventListener('mousedown', onDocumentMouseDown, false);
     document.addEventListener('mousemove', onDocumentMouseMove, false);
@@ -237,8 +265,10 @@
     PenHolder = build_penHolder();
     PenHolder.position.set(-10 ,30.5, -15);
     RemoteControl = build_remoteControl();
-    //RemoteControl.position.y = 50;
     RemoteControl.position.set(20, 30.25, 15);
+    PhotoFrame_miku = build_photoFrame_miku();
+    PhotoFrame_kirito = build_photoFrame_kirito();
+    PhotoFrame_boat = build_photoFrame_boat();
 
     // shadow related
     renderer.shadowMap.enabled = true;
@@ -273,10 +303,37 @@
         }
       }
     );
+    PhotoFrame_miku.traverse (
+     function (mesh) {
+        if (mesh instanceof THREE.Mesh) {
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
+        }
+      }
+    );
+    PhotoFrame_kirito.traverse (
+     function (mesh) {
+        if (mesh instanceof THREE.Mesh) {
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
+        }
+      }
+    );
+    PhotoFrame_boat.traverse (
+     function (mesh) {
+        if (mesh instanceof THREE.Mesh) {
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
+        }
+      }
+    );
 
     scene.add(Table);
     scene.add(PenHolder);
     scene.add(RemoteControl);
+    scene.add(PhotoFrame_miku);
+    scene.add(PhotoFrame_kirito);
+    scene.add(PhotoFrame_boat);
   }
 
   function onDocumentMouseDown(event) {
@@ -290,12 +347,18 @@
     if (intersects.length > 0) {
       let picked = intersects[0].object.parent.name;
       switch (picked) {
-      case 'cyan':
+      case 'yellow':
         button.toggle();
         toggleRoom = ! toggleRoom;
         break;
       case 'purple':
         button2.toggle();
+        button3.toggle();
+        toggleLamp = ! toggleLamp;
+        break;
+      case 'cyan':
+        button2.toggle();
+        button3.toggle();
         toggleLamp = ! toggleLamp;
         break;
       }
@@ -314,18 +377,29 @@
     else document.body.style.cursor = 'auto';
   }
 
-  function animate() {
-    roomLight.intensity = (toggleRoom === true) ? 1 : 0;
-    lampLight.intensity = (toggleLamp === true) ? 3.5 : 0;
+  function feedbackForce () {
+  	let f = -KP*(yy - lampLight_ref) - KD*vv;
+    return f;
+  }
 
-    roomLight.castShadow = (toggleRoom === true) ? 1 : 0;
-    lampLight.castShadow = (toggleLamp === true) ? 1 : 0;
+  function animate() {
+    var f = feedbackForce();
+  	if (gravity) f += (-20.8);
+    let dt = 0.01;
+    vv += f*dt;
+    yy += vv*dt;
+    lampLight_ref = (toggleLamp === true) ? 1 : 0;
+    lampLight.intensity = (yy > 0.7 && yy < 1.3) ? 3 : 0;
+    roomLight.intensity = (toggleRoom === true) ? 1 : 0;
+
+    roomLight.castShadow = (toggleRoom === true) ? true : false;
+    lampLight.castShadow = (toggleLamp === true) ? true : false;
+
 
     controls.update();
     renderer.render(scene, camera);
     requestAnimationFrame(animate);
   }
-
 
 </script>
 
