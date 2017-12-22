@@ -12,32 +12,38 @@
 
 請點此連結進入 Homework 首頁！-----> [__我是傳送門__](https://j91157j91157.github.io/CGHW/index.html)
 
-Homework 1 : time-based animation, button
+Homework 1 : Time-based animation, Button
    - [Homework 1 の 傳送門](https://j91157j91157.github.io/CGHW/Style%20Clock%20(HW1).html)
      - This homework is finished！:white_check_mark:
 
 :star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2:
 
-Homework 2 : git & github
+Homework 2 : Git & Github
    - Homework 2 就是此 README.md の 頁面
      - This homework is finished！:white_check_mark:
 
 :star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2:
 
-Homework 3 : hierarchical model, cannonball
+Homework 3 : Hierarchical model, Cannonball
    - [Homework 3 の 傳送門](https://j91157j91157.github.io/CGHW/Chariot%20(HW3).html)
      - This homework is finished！:white_check_mark:
 
 :star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2:
 
-Homework 4 : OBJ loader, d-drive, collision
+Homework 4 : OBJ loader, D-drive, Collision
    - [Homework 4 の 傳送門](https://j91157j91157.github.io/CGHW/Drive%20Car%20(HW4).html)
      - This homework is finished！:white_check_mark:
 
 :star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2:
 
-Homework 5 : shadowmap, raycaster
-   - **~~Homework 5 の 傳送門~~**
+Homework 5 : Class, Raycaster, Shadow map, PD control, GLSL
+   - [Homework 5 の 傳送門](https://j91157j91157.github.io/CGHW/My%20Room%20(HW5).html)
+     - This homework is finished！:white_check_mark:
+
+:star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2:
+
+Homework 6 : ？？？
+   - **~~Homework 6 の 傳送門~~**
      - This homework is undone！:no_entry:
 
 :snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake:
