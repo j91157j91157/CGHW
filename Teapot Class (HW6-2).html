@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>★茶壺製造機★</title>
+  <link rel="shortcut icon" href="http://i.imgur.com/jnjsKvZ.png">
+</head>
+<style>
+#info {
+  position: absolute;
+  top: 2%;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  color: #ffffff
+}
+
+body {
+  overflow: hidden;
+}
+</style>
+
+<body>
+<div id="info">
+  The number of teapots in the scene：
+  <input id="islife" type="text" value="NULL">
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<script id="myVertexShader" type="x-shader/x-vertex">
+  uniform vec3 lightpos;  // world coordinate
+  varying vec3 eyelightdir;
+  varying vec3 eyenormal;
+
+  varying vec4 eyepos;
+
+  void main() {
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    eyepos = modelViewMatrix * vec4 (position, 1.0);
+    vec4 eyelightpos= viewMatrix * vec4 (lightpos, 1.0);
+    eyelightdir = normalize (eyelightpos.xyz - eyepos.xyz);
+    eyenormal = normalMatrix * normal;
+  }
+</script>
+
+<script id="myFragmentShader" type="x-shader/x-fragment">
+  varying vec3 eyelightdir;
+  varying vec3 eyenormal;
+  varying vec4 eyepos;
+
+  vec3	coolColor;
+  vec3	warmColor;
+  float alpha;
+  float beta;
+  uniform float opacity;
+
+  void main() {
+    // Gooch Shading
+    vec3 normalVector = normalize(eyenormal);
+    vec3 lightVector = normalize(eyelightdir);
+    float diffuse = dot(normalVector, lightVector);
+
+    coolColor = vec3(0.749, 0.392, 0.137);
+    warmColor = vec3(0.0, 0.682, 1.0);
+    alpha = 0.2;
+    beta = 0.8;
+
+    vec3 coolColorMod = coolColor + diffuse * alpha;
+    vec3 warmColorMod = warmColor + diffuse * beta;
+    vec3 colorOut = ((1.0 + diffuse)/2.0) * coolColorMod + (1.0-(1.0 + diffuse)/2.0) * warmColorMod;
+
+    gl_FragColor = vec4 (colorOut, opacity);
+  }
+</script>
+
+<script>
+class Teapot{ //Teapot Class
+  constructor (number) {
+    this.life = 100;
+    this.on = true;
+    this.angle = 0;
+    this.obj = this.makeTeapot(number);
+    this.mtl = teapotMaterial;
+    this.name = number;
+  }
+  getisOn() {
+    return this.on;
+  }
+  toggle() {
+    this.on = !this.on;
+    this.update();
+  }
+  getangle() {
+    return this.angle;
+  }
+  getlife() {
+	  return this.life;
+  }
+  getname() {
+    return this.name;
+  }
+  update () {
+  	if(this.on && this.life > 0){
+  	  this.angle += 0.05;
+  	  this.life  -= 0.4;
+      this.mtl.uniforms.opacity.value = this.life*0.01;
+  	}
+    this.mtl.uniforms.lightpos.value.copy(pointLight.position);
+  }
+  makeTeapot(number) {
+    teapotMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        lightpos: {type:'v3', value: new THREE.Vector3(0, 30, 20) },
+    	  opacity: {type: 'f', value: 1.0},
+  	   },
+      vertexShader: document.getElementById('myVertexShader').textContent,
+      fragmentShader: document.getElementById('myFragmentShader').textContent
+    });
+    teapotMaterial.transparent = true
+    let model = new THREE.Object3D();
+    var jsonLoader = new THREE.JSONLoader();
+    var url = 'https://raw.githubusercontent.com/jyunming-chen/tutsplus/master/models/teapot.json';
+    jsonLoader.load(url, function(geometry, materials) {
+      //var material = new THREE.MeshFaceMaterial(materials);
+      let jsonModel = new THREE.Mesh(geometry, teapotMaterial);
+      let mesh = unitize (jsonModel, 30);
+      mesh.name = number;
+      model.add(mesh);
+    });
+    return model;
+  }
+}
+
+var scene, renderer, camera, controls;
+var angle = 0;
+var teapotMaterial;
+var lighthelper;
+var teapots = [], pickables = [];
+var raycaster;
+var mouse = new THREE.Vector2();
+var number = 0, islife = 0;
+
+init();
+animate();
+
+function init() {
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+
+  renderer = new THREE.WebGLRenderer({
+    antialias: true
+  });
+  renderer.setSize(width, height);
+  renderer.setClearColor(0x888888);
+  document.body.appendChild(renderer.domElement);
+
+  scene = new THREE.Scene();
+
+  camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000);
+  camera.position.y = 300;
+  camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+  var gridXZ = new THREE.GridHelper(200, 20, 'red', 'white');
+  scene.add(gridXZ);
+
+  pointLight = new THREE.PointLight(0xefffff);
+  //pointLight.position.set(200, 300, 200);
+  scene.add(pointLight);
+  lighthelper = new THREE.Mesh(new THREE.SphereGeometry(5, 8, 4), new THREE.MeshPhongMaterial({
+    color: 0xfcdb00,
+    wireframe: true
+  }));
+  scene.add(lighthelper);
+  var ambientLight = new THREE.AmbientLight(0xffffff);
+  scene.add(ambientLight);
+
+  mesh = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshLambertMaterial({
+    transparent: true,
+    opacity: 0.0,
+    visible: true
+  }));
+  plane = new THREE.Object3D();
+  plane.add(mesh);
+  plane.name = number;
+  number++;
+  scene.add(plane);
+  plane.rotation.x = -Math.PI / 2;
+  pickables.push(plane);
+  raycaster = new THREE.Raycaster();
+  document.addEventListener('mousedown', onDocumentMouseDown, false);
+  window.addEventListener('resize', onWindowResize, false);
+}
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function onDocumentMouseDown(event) {
+  event.preventDefault();
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+  var intersects = raycaster.intersectObjects(pickables, true);
+
+  if (intersects.length > 0) {  //滑鼠有點到 teapot
+  	if(intersects[0].object.parent.name === 0){
+  		let picked = intersects[0].object.parent.name;
+  		if(picked === 0){ //新建 teapot
+  		  let teapot = new Teapot(number);
+  		  teapots.push(teapot);
+  		  scene.add(teapot.obj);
+  		  teapot.obj.position.copy(intersects[0].point);
+  		  pickables.push(teapots[teapots.length - 1].obj);
+  		  number++;
+  		  islife++;
+  		}
+  	}
+  	else {
+  		let picked = intersects[0].object.parent.name;
+  		for (let i = 0; i < teapots.length + 1; i++) { //切換teapot狀態
+  			if(picked === teapots[i].name) teapots[i].toggle();
+        console.log(teapots[i].name);
+  		}
+  	}
+  }
+}
+
+function animate() {
+  angle += 0.01
+  teapots.forEach (function (teapot) {
+    	teapot.update();
+  })
+  for (let i = 0; i < teapots.length; i++) { //更新 teapot 旋轉
+  	if(teapots[i].getisOn() == true) {
+  		teapots[i].obj.rotation.y = teapots[i].getangle();
+  		if(teapots[i].getlife() <= 0){ //判斷 teapot 死掉了
+          scene.remove(teapots[i].obj);
+  			  for(let j = i+1; j < pickables.length; j++) pickables[j] = pickables[j + 1];
+          for(let k = i; k < teapots.length; k++) teapots[k] = teapots[k + 1];
+  			  pickables.pop();
+  			  teapots.pop();
+  			  islife--;
+  		}
+    }
+  }
+  pointLight.position.set(60 * Math.cos(angle), 80, 60 * Math.sin(angle));
+  lighthelper.position.copy(pointLight.position);
+  $('#islife').val(islife);
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+function unitize (object, targetSize) {
+	var box3 = new THREE.Box3();
+	box3.setFromObject (object);
+	var size = new THREE.Vector3();
+	size.subVectors (box3.max, box3.min);
+	var center = new THREE.Vector3();
+	center.addVectors(box3.max, box3.min).multiplyScalar (0.5);
+
+	//console.log ('center: ' + center.x + ', '+center.y + ', '+center.z );
+	//console.log ('size: ' + size.x + ', ' +  size.y + ', '+size.z );
+
+	var objSize = findMax (size);
+	var scaleSet = targetSize/objSize;
+
+	var theObject =  new THREE.Object3D();
+	theObject.add (object);
+	object.scale.set (scaleSet, scaleSet, scaleSet);
+	object.position.set (-center.x*scaleSet, -center.y*scaleSet + size.y/2*scaleSet, -center.z*scaleSet);
+
+	return theObject;
+	function findMax(v) {
+		if (v.x > v.y) {
+			return v.x > v.z ? v.x : v.z;
+		}
+    else { // v.y > v.x
+			return v.y > v.z ? v.y : v.z;
+		}
+	}
+}
+</script>
+</body>
+</html>

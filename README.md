@@ -42,8 +42,15 @@ Homework 5 : Class, Raycaster, Shadow map, PD control, GLSL
 
 :star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2:
 
-Homework 6 : ？？？
-   - **~~Homework 6 の 傳送門~~**
+Homework 6 : Basic GLSL, Gooch shaded, GLSL shaders in a class
+   - [Homework 6-1 の 傳送門](https://j91157j91157.github.io/CGHW/Basic%20GLSL%20(HW6-1).html)
+   - [Homework 6-2 の 傳送門](https://j91157j91157.github.io/CGHW/Teapot%20Class%20(HW6-2).html)
+     - This homework is finished！:white_check_mark:
+
+:star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2::star2:
+
+Homework 7 : ？？？
+   - **~~Homework 7 の 傳送門~~**
      - This homework is undone！:no_entry:
 
 :snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake::snowflake:
@@ -53,13 +60,19 @@ Homework 6 : ？？？
 ```javascript
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script> //jQuery
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script> //Three.js
+<script src="https://threejs.org/build/three.js"></script> //Newest Three.js version
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script> //Three.js R84
 
 <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script> //OrbitControls
 
 <script src="https://jyunming-chen.github.io/tutsplus/js/KeyboardState.js"></script> //KeyboardState
 
-<script src="https://threejs.org/build/three.js"></script> //Texture
+<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/MTLLoader.js"></script> //MTL Loader
+
+<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/OBJLoader.js"></script> //OBJ Loader
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stats.js/r16/Stats.min.js"></script> //FPS
 ```
 [按我回到TOP (ページトップへ)](#readme)
 
