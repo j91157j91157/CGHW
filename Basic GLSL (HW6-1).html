@@ -148,14 +148,14 @@ body {
       float diffuse = dot(normalVector, lightVector);
       //float = (1.0 + diffuse)/2;
 
-      coolColor = vec3(0.749, 0.392, 0.137);
-      warmColor = vec3(0.0, 0.682, 1.0);
-      alpha = 0.2;
-      beta = 0.8;
+      coolColor = vec3(0.0, 0.682, 1.0);
+      warmColor = vec3(0.749, 0.392, 0.137);
+      alpha = 0.8;
+      beta = 0.2;
 
       vec3 coolColorMod = coolColor + diffuse * alpha;
       vec3 warmColorMod = warmColor + diffuse * beta;
-      vec3 colorOut = ((1.0 + diffuse)/2.0) * coolColorMod + (1.0-(1.0 + diffuse)/2.0) * warmColorMod;
+      vec3 colorOut = (1.0-(1.0 + diffuse)/2.0) * coolColorMod + ((1.0 + diffuse)/2.0) * warmColorMod;
 
       gl_FragColor = vec4 (colorOut, 1.0);
   }

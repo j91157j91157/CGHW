@@ -61,14 +61,14 @@ body {
     vec3 lightVector = normalize(eyelightdir);
     float diffuse = dot(normalVector, lightVector);
 
-    coolColor = vec3(0.749, 0.392, 0.137);
-    warmColor = vec3(0.0, 0.682, 1.0);
-    alpha = 0.2;
-    beta = 0.8;
+    coolColor = vec3(0.0, 0.682, 1.0);
+    warmColor = vec3(0.749, 0.392, 0.137);
+    alpha = 0.8;
+    beta = 0.2;
 
     vec3 coolColorMod = coolColor + diffuse * alpha;
     vec3 warmColorMod = warmColor + diffuse * beta;
-    vec3 colorOut = ((1.0 + diffuse)/2.0) * coolColorMod + (1.0-(1.0 + diffuse)/2.0) * warmColorMod;
+    vec3 colorOut = (1.0-(1.0 + diffuse)/2.0) * coolColorMod + ((1.0 + diffuse)/2.0) * warmColorMod;
 
     gl_FragColor = vec4 (colorOut, opacity);
   }
@@ -139,7 +139,7 @@ var lighthelper;
 var teapots = [], pickables = [];
 var raycaster;
 var mouse = new THREE.Vector2();
-var number = 0, islife = 0;
+var number = 0, live_value = 0;
 
 init();
 animate();
@@ -218,14 +218,13 @@ function onDocumentMouseDown(event) {
   		  teapot.obj.position.copy(intersects[0].point);
   		  pickables.push(teapots[teapots.length - 1].obj);
   		  number++;
-  		  islife++;
+  		  live_value++;
   		}
   	}
   	else {
   		let picked = intersects[0].object.parent.name;
-  		for (let i = 0; i < teapots.length + 1; i++) { //切換teapot狀態
-  			if(picked === teapots[i].name) teapots[i].toggle();
-        console.log(teapots[i].name);
+  		for (let i = 0; i < teapots.length; i++) {
+  			if(picked === teapots[i].name) teapots[i].toggle(); //切換teapot狀態
   		}
   	}
   }
@@ -245,13 +244,13 @@ function animate() {
           for(let k = i; k < teapots.length; k++) teapots[k] = teapots[k + 1];
   			  pickables.pop();
   			  teapots.pop();
-  			  islife--;
+  			  live_value--;
   		}
     }
   }
   pointLight.position.set(60 * Math.cos(angle), 80, 60 * Math.sin(angle));
   lighthelper.position.copy(pointLight.position);
-  $('#islife').val(islife);
+  $('#islife').val(live_value);
   requestAnimationFrame(animate);
   controls.update();
   renderer.render(scene, camera);
