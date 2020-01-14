@@ -5,7 +5,7 @@
     <link rel="shortcut icon" href="http://i.imgur.com/jnjsKvZ.png">
 </head>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+<script src="https://threejs.org/build/three.min.js"></script>
 <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 
@@ -14,21 +14,18 @@
     <button id="style" style="width:20%">Change Style</button>
 </div>
 
-
-
 <style>
-    #info {
-      position: absolute;
-      top: 2%;
-      width: 100%;
-      padding: 10px;
-      text-align: center;
-      color: #ffff00
-    }
-
-    body {
-      overflow: hidden;
-    }
+	body {
+    margin: 0px;
+		overflow: hidden;
+	}
+  #info {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+  }
 </style>
 
 <body>
@@ -148,7 +145,6 @@
       //scene.add(gridXZ);
 
       window.addEventListener('resize', onWindowResize, false);
-
     }
 
     function onWindowResize() {

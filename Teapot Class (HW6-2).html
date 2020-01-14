@@ -5,18 +5,17 @@
   <link rel="shortcut icon" href="http://i.imgur.com/jnjsKvZ.png">
 </head>
 <style>
-#info {
-  position: absolute;
-  top: 2%;
-  width: 100%;
-  padding: 10px;
-  text-align: center;
-  color: #ffffff
-}
-
-body {
-  overflow: hidden;
-}
+	body {
+    margin: 0px;
+		overflow: hidden;
+	}
+  #info {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+  }
 </style>
 
 <body>
@@ -24,9 +23,10 @@ body {
   The number of teapots in the scene：
   <input id="islife" type="text" value="NULL">
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+<script src="https://threejs.org/build/three.min.js"></script>
 <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="./js/TeapotBufferGeometry.js"></script>
 
 <script id="myVertexShader" type="x-shader/x-vertex">
   uniform vec3 lightpos;  // world coordinate
@@ -119,15 +119,10 @@ class Teapot{ //Teapot Class
     });
     teapotMaterial.transparent = true
     let model = new THREE.Object3D();
-    var jsonLoader = new THREE.JSONLoader();
-    var url = 'https://raw.githubusercontent.com/jyunming-chen/tutsplus/master/models/teapot.json';
-    jsonLoader.load(url, function(geometry, materials) {
-      //var material = new THREE.MeshFaceMaterial(materials);
-      let jsonModel = new THREE.Mesh(geometry, teapotMaterial);
-      let mesh = unitize (jsonModel, 30);
-      mesh.name = number;
-      model.add(mesh);
-    });
+    let jsonModel = new THREE.Mesh(new THREE.TeapotBufferGeometry(10), teapotMaterial);
+    let mesh = unitize (jsonModel, 30);
+    mesh.name = number;
+    model.add(mesh);
     return model;
   }
 }

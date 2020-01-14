@@ -6,17 +6,17 @@
 </head>
 
 <style>
-#info {
-  position: absolute;
-  top: 2%;
-  width: 100%;
-  padding: 10px;
-  text-align: center;
-  color: #ffffff;
-}
-body {
-  overflow: hidden;
-}
+	body {
+    margin: 0px;
+		overflow: hidden;
+	}
+  #info {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+  }
 </style>
 
 <body>
@@ -39,9 +39,10 @@ body {
   <option value="toon">Toon Shading</option>
   </select>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js"></script>
+<script src="https://threejs.org/build/three.min.js"></script>
 <script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="./js/TeapotBufferGeometry.js"></script>
 
 <script id="myVertexShader" type="x-shader/x-vertex">
   uniform int shading;
@@ -307,23 +308,16 @@ function init() {
     fragmentShader: document.getElementById('toonFragmentShader').textContent
   });
 
-  var jsonLoader = new THREE.JSONLoader();
+  jsonModel_center = new THREE.Mesh(new THREE.TeapotBufferGeometry(10), new THREE.MeshPhongMaterial());
 
-  //var url = "teapot.json";
-  var url = 'https://raw.githubusercontent.com/jyunming-chen/tutsplus/master/models/teapot.json';
-  jsonLoader.load(url, function(geometry, materials) {
-    //var material = new THREE.MeshFaceMaterial(materials);
-    jsonModel_center = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial());
+  let theTeapot = unitize (jsonModel_center, 50);
+  scene.add(theTeapot);
 
-    let theTeapot = unitize (jsonModel_center, 50);
-    scene.add(theTeapot);
+  jsonModel_moving = new THREE.Mesh(new THREE.TeapotBufferGeometry(10), teapotMaterial);
+  movingTeapot = unitize (jsonModel_moving, 50);
 
-    jsonModel_moving = new THREE.Mesh(geometry, teapotMaterial);
-    movingTeapot = unitize (jsonModel_moving, 50);
-
-    movingTeapot.position.set(70, 0, 0);
-    scene.add(movingTeapot);
-  });
+  movingTeapot.position.set(70, 0, 0);
+  scene.add(movingTeapot);
 }
 
 
