@@ -5,10 +5,10 @@
     <link rel="shortcut icon" href="http://i.imgur.com/jnjsKvZ.png">
 </head>
 
-<script src="https://threejs.org/build/three.min.js"></script>
-<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
-<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/MTLLoader.js"></script>
-<script src="https://rawgit.com/mrdoob/three.js/master/examples/js/loaders/OBJLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.113.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.113.0/examples/js/loaders/MTLLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.113.0/examples/js/loaders/OBJLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.113.0/examples/js/controls/OrbitControls.js"></script>
 <script src="deputyProgram/HW5.html"></script>
 
 <script type="x-shader/x-vertex" id="vertexShaderDepth">
@@ -269,7 +269,7 @@
 			objLoader.setPath('model/HW5/');
 			objLoader.load('chair.obj', function(object) {
 				let model = unitize (object, 35);
-        model.position.set(-10, -5, 35);
+        model.position.set(-10, 0, 35);
         model.rotation.y = Math.PI;
         model.traverse (
          function (mesh) {
